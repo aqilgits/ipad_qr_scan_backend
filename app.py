@@ -30,7 +30,7 @@ class MeetingScheme(SQLAlchemyAutoSchema):
     host = fields.String(required=True)
 
 db.init_app(app)
-
+# 
 @app.route('/api/v1/visitor',methods=['POST'])
 def new_visitor():
     data = request.get_json()
