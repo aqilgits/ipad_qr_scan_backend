@@ -28,12 +28,14 @@ class MeetingScheme(SQLAlchemyAutoSchema):
     time = fields.String(required=True)
     venue = fields.String(required=True)
     host = fields.String(required=True)
+    visitor = fields.String(required=True)
 
 db.init_app(app)
 
 @app.route('/api/v1/visitor',methods=['POST'])
 def new_visitor():
     data = request.get_json()
+    print(data)
     visitor = Visitor(ic=data.get('ic'), email=data.get('email'), name=data.get('name'), image =data.get('image') )
     db.session.add(visitor)
     db.session.commit()
@@ -95,9 +97,10 @@ def meeting():
     meeting = meeting_schema.dump(get_meeting)
     return make_response(jsonify({"meeting": meeting}))
 
-@app.route('/api/v1/meeting/<email>', methods=['GET'])
-def meeting_by_email(email):
-   get_meeting = Meeting.query.get(email)
+@app.route('/api/v1/meeting/<visitor>', methods=['GET'])
+def meeting_by_email(visitor):
+   get_meeting = Meeting.query.get(visitor)
+   print(get_meeting)
    meeting_schema = MeetingScheme()
    meeting = meeting_schema.dump(get_meeting)
    return make_response(jsonify({"meeting": meeting}))
